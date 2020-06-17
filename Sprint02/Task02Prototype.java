@@ -86,33 +86,18 @@ class Cappuccino extends Caffee {
     protected final static Map<String, Integer> PROTOTYPE = Map.of(
             "Water", 100,
             "Arabica", 20,
-            "Milk", 50
-    );
+            "Milk", 50);
 }
 
 class MyUtils {
-    // this version is OK
-    public Map<String, Double> averageRating(
-            List<Caffee> coffees
-    ) {
-        return coffees.stream()
-                .filter(Objects::nonNull)
-                .collect(groupingBy(
-                        DrinkReceipt::getName,
-                        averagingInt(Rating::getRating)
-                ));
-    }
-
-    // this version compiles but causes Runtime Error:
     public <T extends DrinkReceipt & Rating>
-    Map<String, Double> averageRatingGeneric(
+    Map<String, Double> averageRatingGenericOK(
             List<? extends T> coffees
     ) {
-        return coffees.stream()
-                .filter(Objects::nonNull)
+        return coffees.stream().filter(Objects::nonNull)
                 .collect(groupingBy(
                         DrinkReceipt::getName,
-                        averagingInt(Rating::getRating)
+                        Collectors.<T>averagingInt(Rating::getRating)
                 ));
     }
 
@@ -131,7 +116,5 @@ class MyUtils {
                 .forEach(System.out::println);
 
         System.out.println(new MyUtils().averageRating(cups));
-        // this causes RuntimeError:
-        System.out.println(new MyUtils().averageRatingGeneric(cups));
     }
 }
