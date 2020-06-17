@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -91,7 +92,7 @@ class Cappuccino extends Caffee {
 
 class MyUtils {
     public <T extends DrinkReceipt & Rating>
-    Map<String, Double> averageRatingGenericOK(
+    Map<String, Double> averageRating(
             List<? extends T> coffees
     ) {
         return coffees.stream().filter(Objects::nonNull)
