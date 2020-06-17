@@ -64,9 +64,7 @@ class Cappuccino extends Caffee {
 }
 
 class MyUtils {
-    // this version is OK
-    public Map<String, Double> averageRating(
-            List<Caffee> coffees    // this non generic version is OK
+    // this non generic version is OK
     public Map<String, Double> averageRating(
             List<Caffee> coffees
     ) {
