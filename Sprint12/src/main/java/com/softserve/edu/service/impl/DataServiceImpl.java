@@ -79,4 +79,12 @@ public class DataServiceImpl implements DataService {
     public List<Solution> getSolutions() {
         return Collections.unmodifiableList(solutions);
     }
+
+    public void clearAll() {
+        students.clear();
+        mentors.clear();
+        sprints.clear();
+        communications.clear();
+        solutions.clear();
+    }
 }

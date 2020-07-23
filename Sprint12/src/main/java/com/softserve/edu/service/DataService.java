@@ -17,4 +17,5 @@ public interface DataService {
     List<Entity> getSprints();
     List<Communication> getCommunications();
     List<Solution> getSolutions();
+    void clearAll();
 }
