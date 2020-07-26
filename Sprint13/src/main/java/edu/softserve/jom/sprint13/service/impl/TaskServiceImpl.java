@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
             task.setSprint(sprint);
             sprint.getTasks().add(task);
         }
-        return task;
+        return task; // persist by cascade from marathon->sprint->task
     }
 
     @Override

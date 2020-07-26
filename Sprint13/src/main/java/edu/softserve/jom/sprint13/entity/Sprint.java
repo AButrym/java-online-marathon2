@@ -35,6 +35,7 @@ public class Sprint {
     private Marathon marathon;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
             mappedBy = "sprint")
     @Builder.Default

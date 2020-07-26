@@ -1,14 +1,12 @@
 package edu.softserve.jom.sprint13.entity;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -55,12 +53,14 @@ public class User {
     private Role role;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
-            mappedBy = "user")
+            mappedBy = "trainee")
     private Set<Progress> progresses = new HashSet<>();
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             mappedBy = "users")

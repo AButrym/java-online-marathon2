@@ -36,6 +36,7 @@ public class Task {
     private Sprint sprint;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
             mappedBy = "task")
     @Builder.Default

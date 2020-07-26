@@ -4,8 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.awt.print.Book;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -23,12 +24,14 @@ public class Marathon {
     private String title;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
             mappedBy = "marathon")
-    @Builder.Default
     private Set<Sprint> sprints = new HashSet<>();
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Builder.Default
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "marathon_user",
