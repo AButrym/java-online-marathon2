@@ -3,4 +3,5 @@
 ### Spring MVC + Thymeleaf
 
 joint project: https://github.com/AButrym/jom2-sprint-14
+
 youtube demo: WIP
