@@ -8,6 +8,6 @@ Task:
 3. Create 404 page and 500 page.
 4. Implement exception handling with redirection to "Error" page.
 
-youtube demo: WIP
+youtube demo: https://www.youtube.com/watch?v=BgrnMERFRVE&feature=youtu.be
 
 join project: https://github.com/AButrym/JOM2_Sprint16
