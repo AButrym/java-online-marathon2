@@ -10,7 +10,7 @@
 <body>
 <div th:replace="fragments/header"></div>
 <h2>New Student Registration</h2>
-<form th:action="@{/students/{marathon_id}/add(marathon_id = ${param.marathon_id})}" th:object="${user}" method="post">
+<form th:action="@{/students/__${param.marathon_id}__/add}" th:object="${user}" method="post">
     <table aria-describedby="registration form">
         <tr>
             <th scope="row">
