@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Students</title>
+    <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" th:href="@{/img/favicon.png}"/>
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+    <script defer src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<h2>List of Students</h2>
+<table aria-describedby="List of Students">
+    <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Id</th>
+        <th scope="col">First name</th>
+        <th scope="col">Last name</th>
+        <th scope="col">E-mail</th>
+        <th colspan="2" scope="col">Operations</th>
+    </tr>
+    <tr th:each="student, iStat: ${students}">
+        <td th:text="${iStat.index + 1}">1</td>
+        <td th:text="${student.id}">1</td>
+        <td th:text="${student.firstName}">Name</td>
+        <td th:text="${student.lastName}">Surname</td>
+        <td th:text="${student.email}">some@email.com</td>
+        <td>
+            <a th:href="@{|/students/edit/${student.id}|}">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{|/students/delete/${student.id}|}">Delete</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

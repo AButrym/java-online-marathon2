@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit existing Marathon</title>
+    <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" th:href="@{/img/favicon.png}"/>
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+    <script defer src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<h2>Edit existing Marathon</h2>
+<form th:object="${marathon}" method="post">
+    <table aria-describedby="Form for editing Marathon">
+        <tr>
+            <th scope="row">
+                <label for="id">Id:</label>
+            </th>
+            <td>
+                <input type="text" th:field="*{id}" id="id" th:value="*{id}" disabled/>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                <label for="title">Title:</label>
+            </th>
+            <td>
+                <input type="text" th:field="*{title}" id="title" th:value="*{title}"/>
+            </td>
+            <td class="error">
+                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Update"/>
+                <input type="reset" value="Clear"/>
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" name="id" th:value="*{id}">
+</form>
+<br>
+<a th:href="@{/marathons}">Go to Marathons page</a>
+</body>
+</html>

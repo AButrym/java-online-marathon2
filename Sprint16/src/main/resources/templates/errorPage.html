@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" th:href="@{/img/favicon.png}"/>
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
+    <script defer src="../static/js/main.js" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div th:replace="fragments/header"></div>
+<h1>There was some error.</h1>
+<h2 th:text="${errorMsg}"></h2>
+</body>
+</html>
