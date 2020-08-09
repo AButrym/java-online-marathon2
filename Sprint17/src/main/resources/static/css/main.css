@@ -1,0 +1,22 @@
+.info-title {
+    color: darkgreen;
+}
+
+.error {
+    color: darkred;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid slategrey;
+}
+
+td, th {
+    border: 1px solid dimgrey;
+    padding: 5px;
+}
+
+td.error {
+    empty-cells: hide;
+}
+
