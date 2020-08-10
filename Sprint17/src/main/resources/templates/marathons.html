@@ -3,37 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Marathons</title>
-    <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" th:href="@{/img/favicon.png}"/>
-    <link rel="stylesheet" href="../static/css/main.css" th:href="@{/css/main.css}">
-    <script defer src="../static/js/main.js" th:src="@{/js/main.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/header"></div>
-<h2>List of Marathons</h2>
-<form action="#" th:action="@{/create-marathon}" method="get">
-    <input type="submit" value="Create marathon">
-</form>
-<br>
-<table aria-describedby="List of Marathons">
-    <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Id</th>
-        <th scope="col">Title</th>
-        <th colspan="2" scope="col">Operations</th>
-    </tr>
-    <tr th:each="marathon, iStat: ${marathons}">
-        <td th:text="${iStat.index + 1}">1</td>
-        <td th:text="${marathon.id}">1</td>
-        <td>
-            <a th:href="@{|/students/${marathon.id}|}" th:text="${marathon.title}">Marathon1</a>
-        </td>
-        <td>
-            <a th:href="@{|/marathons/edit/${marathon.id}|}">Edit</a>
-        </td>
-        <td>
-            <a th:href="@{|/marathons/delete/${marathon.id}|}">Close</a>
-        </td>
-    </tr>
-</table>
+    <div th:replace="header"></div>
+    <h2>List of Marathons</h2>
+    <form action="#" th:action="@{/create-marathon}" method="get">
+        <input type="submit" value="Create Marathon">
+    </form>
+    <br>
+    <table border="1">
+        <tr>
+            <th>No.</th>
+            <th>Id</th>
+            <th>Title</th>
+            <th colspan="2">Operations</th>
+            <th>Sprints</th>
+        </tr>
+        <tr th:each="marathon, iStat: ${marathons}">
+            <td th:text="${iStat.index + 1}" />
+            <td th:text="${marathon.id}" />
+            <td>
+                <a th:href="@{|/students/${marathon.id}|}" th:text="${marathon.title}" />
+            </td>
+            <td >
+                <a th:href="@{|/marathons/edit/${marathon.id}|}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{|/marathons/delete/${marathon.id}|}">Close</a>
+            </td>
+            <td>
+                <form th:action="@{/sprints/{marathon_id}(marathon_id=${marathon.id})}">
+                    <input type="submit" value="List of Sprints">
+                </form>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

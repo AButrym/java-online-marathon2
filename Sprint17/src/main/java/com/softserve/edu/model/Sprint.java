@@ -1,46 +1,35 @@
 package com.softserve.edu.model;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
-@Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Sprint {
 
     @Id
-    @GeneratedValue(generator = "sprint_generator")
-    @GenericGenerator(
-            name = "sprint_generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     @NotNull
     private String title;
 
-    @Column
-    private Instant finish;
+    @Column(name = "start_date")
+    private LocalDate startDate;
 
-    @Column
-    private Instant startDate;
-
-    @ManyToOne
-    @JoinColumn(name = "marathon_id")
-    private Marathon marathon;
+    @Column(name = "finish")
+    private LocalDate endDate;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
-            mappedBy = "sprint")
-    @Builder.Default
-    private Set<Task> tasks = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "marathon_id", nullable = false)
+    private Marathon marathon;
+
+    @OneToMany(mappedBy = "sprint")
+    private List<Task> tasks;
 }

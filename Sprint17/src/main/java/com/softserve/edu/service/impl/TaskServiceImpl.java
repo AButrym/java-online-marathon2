@@ -1,44 +1,36 @@
 package com.softserve.edu.service.impl;
 
+import com.softserve.edu.exception.EntityNotFoundException;
 import com.softserve.edu.model.Sprint;
 import com.softserve.edu.model.Task;
-import com.softserve.edu.exception.SprintNotFoundException;
-import com.softserve.edu.exception.TaskNotFoundException;
 import com.softserve.edu.repository.SprintRepository;
 import com.softserve.edu.repository.TaskRepository;
 import com.softserve.edu.service.TaskService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import org.springframework.transaction.annotation.Transactional;
+import javax.transaction.Transactional;
+import java.util.Optional;
 
-@Service
 @AllArgsConstructor
+@Service
 public class TaskServiceImpl implements TaskService {
-    private final TaskRepository taskRepository;
-    private final SprintRepository sprintRepository;
 
-    @Transactional
+    final TaskRepository taskRepository;
+    final SprintRepository sprintRepository;
+
     @Override
+    @Transactional
     public Task addTaskToSprint(Task task, Sprint sprint) {
-        if (task.getSprint() != null) {
-            throw new IllegalStateException(
-                    "Reassigning a task to another sprint is not allowed");
+        Optional<Sprint> sprintEntityOpt = sprintRepository.findById(sprint.getId());
+        if (sprintEntityOpt.isPresent()){
+            task.setSprint(sprintEntityOpt.get());
+            return taskRepository.save(task);
         }
-        var sprintId = sprint.getId();
-        sprint = sprintRepository.findById(sprintId)
-                .orElseThrow(() -> new SprintNotFoundException(sprintId));
-        task.setSprint(sprint);
-        task = taskRepository.save(task);
-        sprint.getTasks().add(task);
-        sprintRepository.save(sprint);
-        return task;
+        throw new EntityNotFoundException(("No task /w id " + sprint.getId()));
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Task getTaskById(Long taskId) {
-        return taskRepository.findById(taskId)
-                .orElseThrow(() -> new TaskNotFoundException(taskId));
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(("No Task exist for given id")));
     }
 }

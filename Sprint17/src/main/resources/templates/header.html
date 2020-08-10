@@ -1,0 +1,17 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <nav>
+        <a th:href="@{/}">Home Page</a> |
+        <a th:href="@{/marathons}">List of Marathons</a> |
+        <a th:href="@{/students}">List of Students</a>
+    </nav>
+    <div sec:authorize="isAuthenticated()"
+         style="position: absolute; top: 10px; right: 20px; border: lightblue 2px solid; border-radius: 5px; padding: 0 5px 5px; text-align: center;">
+        <p>You are logged as:</p>
+        <p sec:authentication="name" style="font-weight: bold; color: darkblue;"></p>
+        <form th:action="@{/perform-logout}" method="post">
+            <input type="submit" value="LogOut">
+        </form>
+    </div>
+</div>

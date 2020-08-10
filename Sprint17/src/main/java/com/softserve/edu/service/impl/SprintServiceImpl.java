@@ -1,9 +1,8 @@
 package com.softserve.edu.service.impl;
 
+
 import com.softserve.edu.model.Marathon;
 import com.softserve.edu.model.Sprint;
-import com.softserve.edu.exception.MarathonNotFoundException;
-import com.softserve.edu.exception.SprintNotFoundException;
 import com.softserve.edu.repository.MarathonRepository;
 import com.softserve.edu.repository.SprintRepository;
 import com.softserve.edu.service.SprintService;
@@ -11,55 +10,44 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 @Transactional
-@AllArgsConstructor
 public class SprintServiceImpl implements SprintService {
+
     private final SprintRepository sprintRepository;
     private final MarathonRepository marathonRepository;
 
-    @Override
-    public List<Sprint> getSprintsByMarathonId(Long marathonId) {
-        return new ArrayList<>( // defensive copy
-                marathonRepository.findById(marathonId)
-                        .orElseThrow(() -> new MarathonNotFoundException(marathonId))
-                        .getSprints());
+    public List<Sprint> getSprintsByMarathonId(Long id){
+        return sprintRepository.getAllSprintsByMarathonId(id);
     }
 
-    @Override
-    public boolean addSprintToMarathon(Sprint sprint, Marathon marathon) {
-        if (sprint.getMarathon() != null) {
-            // reassigning a sprint to another marathon is not allowed
-            return false;
-        }
-        var marathonId = marathon.getId();
-        marathon = marathonRepository.findById(marathonId)
-                .orElseThrow(() -> new MarathonNotFoundException(marathonId));
-        sprint.setMarathon(marathon);
-        sprint.setId(sprintRepository.save(sprint).getId());
-        marathon.getSprints().add(sprint);
-        marathonRepository.save(marathon);
-        return true;
+    public boolean addSprintToMarathon(Sprint sprint, @NotNull Marathon marathon){
+
+        if (sprint.getId() == null) {
+            Marathon marathonEntity = marathonRepository.getOne(marathon.getId());
+            if (!sprintRepository.findFirstByTitleAndMarathon(sprint.getTitle(), marathonEntity).isPresent()) {
+                sprint.setMarathon(marathonEntity);
+                sprintRepository.save(sprint);
+                marathonEntity.getSprints().add(sprint);
+                return marathonRepository.save(marathonEntity) != null;
+            }
+            }
+        return false;
     }
 
     @Override
     public boolean updateSprint(Sprint sprint) {
-        // persist a sprint by calling addSprintToMarathon()
-        if (sprint.getId() == null
-                || sprint.getMarathon() == null
-                || !sprint.getMarathon().getSprints().contains(sprint)) {
-            return false;
-        }
-        sprintRepository.save(sprint);
-        return true;
+        return false;
     }
 
     @Override
-    public Sprint getSprintById(Long sprintId) {
-        return sprintRepository.findById(sprintId)
-                .orElseThrow(() -> new SprintNotFoundException(sprintId));
+    public Sprint getSprintById(Long id) {
+        Optional<Sprint> sprint = sprintRepository.findById(id);
+        return sprint.get();// new EntityNotFoundException("No marathon exist for given id");
     }
 }

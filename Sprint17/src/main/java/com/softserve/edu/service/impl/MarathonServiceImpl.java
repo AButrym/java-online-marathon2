@@ -1,45 +1,58 @@
 package com.softserve.edu.service.impl;
 
+import com.softserve.edu.exception.EntityNotFoundException;
 import com.softserve.edu.model.Marathon;
-import com.softserve.edu.exception.MarathonNotFoundException;
 import com.softserve.edu.repository.MarathonRepository;
 import com.softserve.edu.service.MarathonService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class MarathonServiceImpl implements MarathonService {
+
     private final MarathonRepository marathonRepository;
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Marathon> getAll() {
-        return marathonRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Marathon getMarathonById(Long id) {
-        return marathonRepository.findById(id).orElseThrow(
-                () -> new MarathonNotFoundException(id)
-        );
+    public MarathonServiceImpl(MarathonRepository marathonRepository) {
+        this.marathonRepository = marathonRepository;
     }
 
     @Transactional
-    @Override
-    public Marathon createOrUpdate(Marathon marathon) {
+    public List<Marathon> getAll() {
+        List<Marathon> marathons = marathonRepository.findAll();
+        return marathons.isEmpty() ? new ArrayList<>() : marathons;
+    }
+
+    public Marathon getMarathonById(Long id)  {
+        return marathonRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(("No marathon /w id "+id)));// add to Logger later
+  }
+
+    public Marathon createOrUpdate(Marathon marathon)  {
+        if (marathon.getId() != null) {
+
+            Optional<Marathon> marathonOptional = marathonRepository.findById(marathon.getId());
+
+            if (marathonOptional.isPresent()) {
+                Marathon newMarathon = marathonOptional.get();
+                newMarathon.setTitle(marathon.getTitle());
+                return marathonRepository.save(newMarathon);
+            }
+        }
+
         return marathonRepository.save(marathon);
     }
 
-    @Transactional
-    @Override
-    public void deleteMarathonById(Long id) {
-        marathonRepository.deleteById(id);
-    }
+    public void deleteMarathonById(Long id)
+    {
+        Optional<Marathon> marathon = marathonRepository.findById(id);
 
+        if(marathon.isPresent()){
+            marathonRepository.deleteById(id);
+        } else{
+            throw new EntityNotFoundException("No marathon exist for given id");
+        }
+    }
 }

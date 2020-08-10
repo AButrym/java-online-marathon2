@@ -1,47 +1,41 @@
 package com.softserve.edu.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDate;
 
-@Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"task_id", "trainee_id"})})
 public class Progress {
 
-    public enum TaskStatus {
-        NEW, SUBMITTED, PASS, FAIL
+    public enum TaskStatus{
+        NEW, PASS, FAIL, PENDING
     }
 
     @Id
-    @GeneratedValue(generator = "progress_generator")
-    @GenericGenerator(
-            name = "progress_generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private TaskStatus status;
-
-    @Column
-    private Instant started;
-
-    @Column
-    private Instant updated;
-
+    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "task_id")
     private Task task;
 
+    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "trainee_id")
     private User trainee;
+
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status = TaskStatus.NEW;
+
+    @CreationTimestamp
+    private LocalDate started;
+
+    @UpdateTimestamp
+    private LocalDate updated;
+
 }

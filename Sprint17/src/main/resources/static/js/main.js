@@ -1,1 +1,1 @@
-console.log("test from main.js");
+console.log("Test js")

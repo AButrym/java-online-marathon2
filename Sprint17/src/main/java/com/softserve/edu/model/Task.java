@@ -1,46 +1,40 @@
 package com.softserve.edu.model;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.List;
 
-@Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Task {
 
     @Id
-    @GeneratedValue(generator = "task_generator")
-    @GenericGenerator(
-            name = "task_generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     @NotNull
     private String title;
 
-    @Column
-    private Instant created;
-
-    @Column
-    private Instant updated;
-
-    @ManyToOne
-    @JoinColumn(name = "sprint_id")
+    @ToString.Exclude
+    @NotNull
+    @ManyToOne(optional=false)
+    @JoinColumn(name="sprint_id")
     private Sprint sprint;
 
     @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,
-            mappedBy = "task")
-    @Builder.Default
-    private Set<Progress> progresses = new HashSet<>();
+    @OneToMany(mappedBy = "task")
+    private List<Progress> progresses;
+
+
+    @CreationTimestamp
+    private LocalDate created;
+
+    @UpdateTimestamp
+    private LocalDate updated;
 }

@@ -8,11 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
-    List<Progress> findAllByTraineeIdAndTaskSprintMarathonId(
-            Long userId, Long marathonId
-    );
-
-    List<Progress> findAllByTraineeIdAndTaskSprintId(
-            Long userId, Long sprintId
-    );
+    List<Progress> findAllByTraineeIdAndTaskSprintMarathonId(Long userId, Long marathonId);
+    List<Progress> findAllByTraineeIdAndTaskSprintId(Long userId, Long sprintId);
 }
